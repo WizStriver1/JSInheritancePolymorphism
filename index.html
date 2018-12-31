@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function deepCopy(target, copyObject) {
+            copyObject = copyObject || {};
+            for(param in target) {
+                if(typeof(target[param]) === 'object') {
+                    copyObject[param] = target[param] instanceof Array ? [] : {};
+                    deepCopy(target[param], copyObject[param]);
+                } else {
+                    copyObject[param] = target[param];
+                }
+            }
+            return copyObject;
+        }
+        function Animal() {
+            this.isAnimal = true;
+        }
+        Animal.prototype = {
+            constructor: Animal,
+            mainfood: 'starch',
+            speed: '100',
+            appearance: ['eyes, ears, nose, mouse'],
+            eat: function() {
+                console.log('I feed on %s', this.mainfood);
+            },
+            run: function() {
+                console.log('My running speed is %skm/s', this.speed);
+            }
+        }
+        function LandAnimal() {
+            this.isLandAnimal = true;
+        }
+        LandAnimal.prototype = deepCopy(new Animal());
+        LandAnimal.prototype.constructor = LandAnimal;
+        function WaterAnimal() {
+            Animal.apply(this, arguments);
+            this.isWaterAnimal = true;
+        }
+        // WaterAnimal.prototype = deepCopy(new Animal());
+        // WaterAnimal.prototype.constructor = WaterAnimal;
+        
+
+    </script>
+</body>
+</html>
